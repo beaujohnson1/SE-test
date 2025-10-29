@@ -10,6 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import UserProfile from "@/components/user-profile";
+import CreditBalance from "./credit-balance";
 import {
   Brush,
   HomeIcon,
@@ -72,7 +73,8 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
             </div>
           </SheetContent>
         </Dialog>
-        <div className="flex justify-center items-center gap-2 ml-auto">
+        <div className="flex justify-center items-center gap-3 ml-auto">
+          <CreditBalance />
           <UserProfile mini={true} />
         </div>
       </header>

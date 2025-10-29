@@ -83,3 +83,45 @@ export const subscription = pgTable("subscription", {
   customFieldData: text("customFieldData"), // JSON string
   userId: text("userId").references(() => user.id),
 });
+
+// Credit System Tables
+export const userCredits = pgTable("user_credits", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  credits: integer("credits").notNull().default(3),
+  lifetimeCreditsUsed: integer("lifetimeCreditsUsed").notNull().default(0),
+  lifetimeCreditsAdded: integer("lifetimeCreditsAdded").notNull().default(3),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+export const creditTransactions = pgTable("credit_transactions", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  amount: integer("amount").notNull(), // Positive for additions, negative for deductions
+  type: text("type").notNull(), // 'signup_bonus', 'subscription_purchase', 'restore_photo', 'export_photo'
+  description: text("description").notNull(),
+  relatedId: text("relatedId"), // Optional: photo ID, subscription ID, etc.
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
+// Photos Table
+export const photos = pgTable("photos", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  url: text("url").notNull(), // Original photo URL
+  size: integer("size").notNull(), // File size in bytes
+  restored: integer("restored").notNull().default(0), // 0 = false, 1 = true
+  restoredUrl: text("restoredUrl"), // URL of restored photo
+  exported: integer("exported").notNull().default(0), // 0 = false, 1 = true
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});

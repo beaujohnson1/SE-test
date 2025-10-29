@@ -21,7 +21,7 @@ function safeParseDate(value: string | Date | null | undefined): Date | null {
 
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: "sandbox",
+  server: "production",
 });
 
 export const auth = betterAuth({
@@ -41,6 +41,10 @@ export const auth = betterAuth({
       subscription,
     },
   }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false,
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,

@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 AuthKey_8LYJ3Y87D4.p8
+
+# Reference landing page (not part of the project)
+NEW Landing Page/

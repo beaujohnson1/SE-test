@@ -21,23 +21,13 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: "Overview",
+    label: "My Photos",
     href: "/dashboard",
     icon: HomeIcon,
   },
   {
-    label: "Chat",
-    href: "/dashboard/chat",
-    icon: MessageCircleIcon,
-  },
-  {
-    label: "Upload",
-    href: "/dashboard/upload",
-    icon: Upload,
-  },
-  {
-    label: "Payment Gated",
-    href: "/dashboard/payment",
+    label: "Credits",
+    href: "/dashboard/credits",
     icon: Banknote,
   },
 ];
@@ -52,10 +42,10 @@ export default function DashboardSideBar() {
         <div className="flex h-[3.45rem] items-center border-b px-4">
           <Link
             prefetch={true}
-            className="flex items-center font-semibold hover:cursor-pointer"
+            className="flex items-center font-serif text-xl hover:cursor-pointer"
             href="/"
           >
-            <span>Nextjs Starter Kit</span>
+            <span>Snaptastic</span>
           </Link>
         </div>
 

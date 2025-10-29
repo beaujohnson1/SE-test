@@ -1,5 +1,10 @@
 import { uploadImageAssets } from "@/lib/upload-image";
+import { auth } from "@/lib/auth";
+import { db } from "@/db/drizzle";
+import { photos } from "@/db/schema";
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 
 export const config = {
   api: { bodyParser: false }, // Disable default body parsing
@@ -7,6 +12,15 @@ export const config = {
 
 export async function POST(req: NextRequest) {
   try {
+    // Check authentication
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     // Parse the form data
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
@@ -53,7 +67,26 @@ export async function POST(req: NextRequest) {
     // Upload the file
     const url = await uploadImageAssets(buffer, filename);
 
-    return NextResponse.json({ url });
+    // Save photo metadata to database
+    const photoId = randomUUID();
+    await db.insert(photos).values({
+      id: photoId,
+      userId: session.user.id,
+      name: file.name,
+      url,
+      size: file.size,
+      restored: 0,
+      exported: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return NextResponse.json({
+      url,
+      id: photoId,
+      name: file.name,
+      size: file.size,
+    });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
