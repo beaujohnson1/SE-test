@@ -179,6 +179,35 @@ export const auth = betterAuth({
                   });
 
                 console.log("✅ Upserted subscription:", data.id);
+
+                // STEP 4: Grant credits if this is a credit pack purchase
+                const CREDIT_PACK_50 = process.env.NEXT_PUBLIC_CREDIT_PACK_50 || "0851cc18-b912-47e8-9415-868124c10297";
+
+                if (userId && data.productId === CREDIT_PACK_50 && (type === "subscription.created" || type === "subscription.active")) {
+                  console.log("💰 Granting 50 credits for credit pack purchase");
+
+                  try {
+                    // Import credit functions
+                    const { addCredits } = await import("./credits");
+
+                    // Grant 50 credits
+                    const result = await addCredits(
+                      userId as string,
+                      50,
+                      "subscription_purchase",
+                      "Credit pack purchase - 50 credits",
+                      data.id
+                    );
+
+                    if (result.success) {
+                      console.log("✅ Granted 50 credits. New balance:", result.newBalance);
+                    } else {
+                      console.error("❌ Failed to grant credits:", result.error);
+                    }
+                  } catch (creditError) {
+                    console.error("💥 Error granting credits:", creditError);
+                  }
+                }
               } catch (error) {
                 console.error(
                   "💥 Error processing subscription webhook:",
