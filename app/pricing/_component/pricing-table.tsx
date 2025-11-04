@@ -15,34 +15,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type SubscriptionDetails = {
-  id: string;
-  productId: string;
-  status: string;
-  amount: number;
-  currency: string;
-  recurringInterval: string;
-  currentPeriodStart: Date;
-  currentPeriodEnd: Date;
-  cancelAtPeriodEnd: boolean;
-  canceledAt: Date | null;
-  organizationId: string | null;
-};
-
-type SubscriptionDetailsResult = {
-  hasSubscription: boolean;
-  subscription?: SubscriptionDetails;
-  error?: string;
-  errorType?: "CANCELED" | "EXPIRED" | "GENERAL";
-};
-
-interface PricingTableProps {
-  subscriptionDetails: SubscriptionDetailsResult;
-}
-
-export default function PricingTable({
-  subscriptionDetails,
-}: PricingTableProps) {
+export default function PricingTable() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
