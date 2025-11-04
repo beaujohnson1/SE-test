@@ -38,7 +38,6 @@ function BeforeAfterTile({ before, after }: { before: string; after: string }) {
   };
 
   const handleMouseDown = () => setIsDragging(true);
-  const handleMouseUp = () => setIsDragging(false);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;

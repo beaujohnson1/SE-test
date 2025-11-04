@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FileImage, Upload, Download, Sparkles, X, Coins } from "lucide-react";
+import { FileImage, Download, Sparkles, X, Coins } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -38,7 +38,6 @@ export default function Dashboard() {
   const [selectedPhoto, setSelectedPhoto] = useState<UploadedPhoto | null>(null);
   const [processing, setProcessing] = useState(false);
   const [sliderPosition, setSliderPosition] = useState(50);
-  const [loading, setLoading] = useState(true);
 
   // Load photos from database on mount
   useEffect(() => {
@@ -59,8 +58,6 @@ export default function Dashboard() {
       } catch (error) {
         console.error("Error loading photos:", error);
         toast.error("Error loading photos");
-      } finally {
-        setLoading(false);
       }
     };
     loadPhotos();
